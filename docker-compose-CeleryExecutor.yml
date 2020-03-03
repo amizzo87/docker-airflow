@@ -55,7 +55,7 @@ services:
         command: flower
 
     scheduler:
-        image: puckel/docker-airflow:1.10.9
+        image: amizzo/bernstein-local:latest
         restart: always
         depends_on:
             - webserver
@@ -74,7 +74,7 @@ services:
         command: scheduler
 
     worker:
-        image: puckel/docker-airflow:1.10.9
+        image: amizzo/bernstein-local:latest
         restart: always
         depends_on:
             - scheduler
