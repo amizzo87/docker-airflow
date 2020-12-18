@@ -417,8 +417,12 @@ ENV AIRFLOW_HOME=${AIRFLOW_HOME}
 # OpenShift https://docs.openshift.com/enterprise/3.0/creating_images/guidelines.html
 RUN mkdir -pv "${AIRFLOW_HOME}"; \
     mkdir -pv "${AIRFLOW_HOME}/dags"; \
-    mkdir -pv "${AIRFLOW_HOME}/logs"; \
-    chown -R "airflow:root" "${AIRFLOW_USER_HOME_DIR}" "${AIRFLOW_HOME}"; \
+    mkdir -pv "${AIRFLOW_HOME}/logs"
+    
+COPY scripts/entrypoint.sh /entrypoint.sh
+COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
+
+RUN chown -R "airflow:root" "${AIRFLOW_USER_HOME_DIR}" "${AIRFLOW_HOME}"; \
     find "${AIRFLOW_HOME}" -executable -print0 | xargs --null chmod g+x && \
         find "${AIRFLOW_HOME}" -print0 | xargs --null chmod g+rw
 
@@ -459,9 +463,5 @@ LABEL org.apache.airflow.distro="debian" \
   org.apache.airflow.mainImage.buildId=${BUILD_ID} \
   org.apache.airflow.mainImage.commitSha=${COMMIT_SHA}
 
-COPY scripts/entrypoint.sh /entrypoint.sh
-COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
-
-RUN chown -R airflow:root ${AIRFLOW_HOME}
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["webserver"]
