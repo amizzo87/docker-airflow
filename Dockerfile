@@ -459,9 +459,9 @@ LABEL org.apache.airflow.distro="debian" \
   org.apache.airflow.mainImage.buildId=${BUILD_ID} \
   org.apache.airflow.mainImage.commitSha=${COMMIT_SHA}
 
-COPY script/entrypoint.sh /entrypoint.sh
-COPY config/airflow.cfg ${AIRFLOW_USER_HOME_DIR}/airflow.cfg
+COPY scripts/entrypoint.sh /entrypoint.sh
+COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 
-RUN chown -R airflow: ${AIRFLOW_USER_HOME_DIR}
+RUN chown -R airflow: ${AIRFLOW_HOME}
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["webserver"]
